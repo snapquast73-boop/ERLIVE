@@ -1,12 +1,14 @@
 # ErrorsLive — MLB scoring watch
 
+> Restoration note: the original upload omitted the application and research files. The historical notes below describe upstream, not verified features of this reconstruction. See [Flagged for Review](review.html).
+
 The public first-use flow is an all-games MLB scoreboard plus a focused scoring feed for current
 official field errors, exact primary official-scorer-pending rulings, and error-involving classification
 changes that the browser actually observed. The existing model estimates a final captured outcome
 class; it does **not** estimate the probability that an error call will be changed. This repository
 also contains the underlying data pipeline, model research, and historical audit pages.
 
-**Site (GitHub Pages):** https://buffedlizard55-lab.github.io/ErrorsLive/
+**Site (GitHub Pages):** https://snapquast73-boop.github.io/ERLIVE/
 **Sister dataset researched:** https://github.com/nydailynews/mlb-overturned-calls (2014–2018 manager-replay overturns)
 
 ---
