@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "node --test tests/watch.cjs"
+    "test": "node --test tests/*.cjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0"

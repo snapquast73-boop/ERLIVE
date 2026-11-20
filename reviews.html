@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ErrorsLive — Scoring Feed</title>
+  <meta name="description" content="Live MLB scoring feed for primary field errors, official-scorer pending rulings, and replay reviews.">
+  <link rel="preconnect" href="https://statsapi.mlb.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-reviews">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-ball" aria-hidden="true">⚾</span>
+      <span>ErrorsLive</span>
+      <span class="brand-sub">scoring feed · all games</span>
+    </div>
+    <a class="btn btn-ghost" href="index.html">← Scoreboard</a>
+    <div class="date-nav">
+      <button class="btn btn-ghost" onclick="ReplayFeed.prevDay()" title="Previous day">←</button>
+      <input type="date" id="date-picker" onchange="ReplayFeed.pickDate()" aria-label="Game date">
+      <button class="btn btn-ghost" onclick="ReplayFeed.nextDay()" title="Next day">→</button>
+      <button class="btn" onclick="ReplayFeed.today()">Today</button>
+    </div>
+    <div id="date-label" class="date-label"></div>
+    <div class="feed-controls">
+      <button id="sound-toggle-btn" class="btn btn-ghost" title="Play a browser chime for newly observed feed rows">🔇 Sound Off</button>
+      <button id="notify-toggle-btn" class="btn btn-ghost" title="Request desktop notifications for active reviews with linked scoring movements">⚪ Run Alerts Off</button>
+      <button id="refresh-btn" class="btn">Refresh</button>
+      <span class="countdown" id="countdown" title="Seconds until the next poll"></span>
+      <div class="live-pill" title="Polling the MLB StatsAPI">
+        <span id="live-dot" class="live-dot"></span><span>LIVE</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" aria-live="polite"></div>
+
+  <main class="reviews-main">
+    <section id="active-strip" class="active-strip-wrap" aria-live="polite"></section>
+    <section id="feed-stats" class="reviews-summary-bar" aria-label="Feed counts"></section>
+    <nav id="feed-tabs" class="tabs" aria-label="Filter scoring feed"></nav>
+    <section id="feed-list" class="feed-list" aria-live="polite"></section>
+    <div id="status-line" class="status-line" role="status"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Unofficial fan project. This page reads the public
+      <a href="https://statsapi.mlb.com" target="_blank" rel="noopener">MLB StatsAPI</a> from your browser.
+      A field-error row is included only when a play's result event type is <code>field_error</code>; this is not
+      a complete inventory of every error notation. A scorer-pending row is included only for the primary
+      <code>os_ruling_pending_primary</code> event, not the prior/base-running marker. See the official
+      <a href="https://statsapi.mlb.com/api/v1/eventTypes" target="_blank" rel="noopener">MLB event-type registry</a>.
+      Every displayed event links to its game's official feed. Recent rows are saved in this browser only;
+      cached rows not reconfirmed by the latest game-feed response are labeled and excluded from current
+      counts. Sound and desktop notifications are optional browser features. Notifications are limited to active
+      reviews with scoring movements associated in the feed; they do not predict a ruling or a score change.
+      This build does not track historical scoring reclassifications. See
+      <a href="review.html">Flagged for Review</a> for verification scope and known limitations.
+      Not affiliated with MLB or MLB Advanced Media.
+    </p>
+    <p><a href="review.html">Flagged for Review</a></p>
+  </footer>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/reviews.js"></script>
+  <script src="assets/js/feed-log.js"></script>
+  <script src="assets/js/reviews-feed.js"></script>
+</body>
+</html>

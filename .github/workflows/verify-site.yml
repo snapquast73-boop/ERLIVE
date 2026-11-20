@@ -1,0 +1,39 @@
+name: Verify static site
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install test dependencies
+        run: npm ci
+
+      - name: Check JavaScript syntax
+        run: |
+          set -eu
+          for file in assets/js/*.js; do
+            node --check "$file"
+          done
+
+      - name: Run browser-DOM regression tests
+        run: npm test
+
+      - name: Check local HTML links and assets
+        run: python3 tools/check-local-links.py

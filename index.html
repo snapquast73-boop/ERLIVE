@@ -1,1 +1,49 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ErrorsLive — MLB scorer watch</title><link rel="stylesheet" href="style.css"><main><header>ERRORSLIVE · MLB</header><h1>Scorer watch</h1><p>Official game scores and primary field-error and pending scorer rulings. Refreshes every minute.</p><label>Game date <input id="date" type="date"></label><p id="status" role="status"></p><h2>Scoreboard</h2><div id="games"></div><h2>Scoring feed</h2><div id="feed"></div><footer><a href="review.html">Flagged for Review</a></footer></main><script src="watch.js"></script></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErrorsLive — MLB scorer watch</title>
+  <meta name="description" content="MLB schedule and scorer watch for primary field errors, official-scorer pending rulings and game details from the public StatsAPI.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23fff' stroke='%23e03131' stroke-width='6'/%3E%3Cpath d='M50 4 A46 46 0 0 1 96 50 M50 96 A46 46 0 0 1 4 50 M4 50 A46 46 0 0 1 50 4 M96 50 A46 46 0 0 1 50 96' stroke='%23e03131' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://statsapi.mlb.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-scoreboard">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-ball">⚾</span>
+      <span>ErrorsLive</span>
+      <span class="brand-sub">scorer watch · scoreboard</span>
+    </div>
+    <a class="btn btn-feed" href="reviews.html" title="Live scoring feed for every game: field errors, pending rulings and reviews">🚨 Scoring Feed</a>
+    <div class="date-nav">
+      <button class="btn btn-ghost" onclick="Scoreboard.prevDay()" title="Previous day">←</button>
+      <input type="date" id="date-picker" onchange="Scoreboard.pickDate()" aria-label="Game date">
+      <button class="btn btn-ghost" onclick="Scoreboard.nextDay()" title="Next day">→</button>
+      <button class="btn" onclick="Scoreboard.today()">Today</button>
+    </div>
+    <div id="date-label" class="date-label"></div>
+  </header>
+
+  <div id="banner" class="banner"></div>
+  <nav id="tabs" class="tabs" aria-label="Filter games"></nav>
+
+  <main id="game-list" class="game-list"></main>
+
+  <div id="status-line" class="status-line"></div>
+
+  <footer class="site-footer">
+    <p>
+      Unofficial fan project. Data via the public
+      <a href="https://statsapi.mlb.com" target="_blank" rel="noopener">MLB StatsAPI</a>.
+      Not affiliated with MLB or MLB Advanced Media.
+    </p>
+    <p><a href="review.html">Flagged for Review</a></p>
+  </footer>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/scoreboard.js"></script>
+</body>
+</html>

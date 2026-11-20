@@ -1,1 +1,149 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Flagged for Review — ErrorsLive</title><link rel="stylesheet" href="style.css"><main><header>ERRORSLIVE · AUDIT</header><h1>Flagged for Review</h1><p>The <a href="https://github.com/snapquast73-boop/ERLIVE/tree/3e8733a">original upload</a> contained a redirect but not the application, tests, trained model or historical dataset. The named upstream repository was not publicly retrievable during restoration. Visual and functional parity cannot be verified.</p><p>The <a href="https://github.com/snapquast73-boop/ERLIVE/blob/3e8733a/README.md">imported research notes</a> are not verified results. Model predictions, observed ruling changes and historical audit tables are not reproduced here. The feed filters primary event types; it is not a count of every defensive error. The primary pending code was checked against the <a href="https://statsapi.mlb.com/api/v1/eventTypes">MLB event registry</a> and tested with a simulated play. A live pending ruling was not observed during verification.</p><p>Checks: <a href="https://statsapi.mlb.com/api/v1/schedule?sportId=1&amp;date=2024-10-30">MLB final score</a> and <a href="https://statsapi.mlb.com/api/v1/game/775296/playByPlay">official play record</a>. Missing fields are left blank.</p><p>Historical ledger exception: game 823490 is listed as cancelled in the <a href="https://statsapi.mlb.com/api/v1.1/game/823490/feed/live?fields=gamePk,gameData,status,detailedState,reason">MLB game record</a>; the <a href="https://statsapi.mlb.com/api/v1/game/823490/linescore">official linescore</a> supplies no final runs. It is not a confirmed score mismatch.</p><a href="index.html">Back to scorer watch</a></main></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flagged for Review — ErrorsLive</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-ball" aria-hidden="true">⚾</span>
+      <span>ErrorsLive</span>
+      <span class="brand-sub">verification notes</span>
+    </div>
+    <a class="btn btn-ghost" href="index.html">← Scoreboard</a>
+    <a class="btn btn-feed" href="reviews.html">Scoring Feed</a>
+  </header>
+
+  <main class="game-main">
+    <section class="panel">
+      <h1>Flagged for Review</h1>
+      <p>
+        This page separates what is implemented and testable from what has not been recovered or
+        independently rechecked. The site is a reconstruction based on the public
+        <a href="https://github.com/snapquast73-boop/LIVPBP2">LIVPBP2</a> and
+        <a href="https://github.com/snapquast73-boop/POSTSSNALRT">POSTSSNALRT</a> examples;
+        the original ErrorsLive application and its missing research artifacts are not present in
+        the uploaded repository snapshot (see the audited
+        <a href="https://github.com/snapquast73-boop/ERLIVE/tree/3e8733a836153b4cecf0ee4a2d0f8104be63fbdd">uploaded source tree</a>).
+        Exact visual or functional parity is therefore <strong>unverified</strong>.
+      </p>
+      <p>
+        Values unavailable from an official source are not filled in. The site shows live values only
+        when the browser receives them from MLB's public API; each event card links to its official
+        game feed. The historical official sources specifically noted below were fetched on
+        2026-11-20; browser CORS and today's live schedule/game responses were not exercised. Direct
+        API links are also provided for manual review.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Implemented in this reconstruction</h2>
+      <ul>
+        <li>
+          The scoreboard requests the selected date from the public
+          <a href="https://statsapi.mlb.com/api/v1/schedule?sportId=1&amp;date=2024-10-30&amp;hydrate=team,linescore,probablePitcher,decisions,review,flags,gameInfo">MLB schedule API</a>.
+          Fetched on 2026-11-20, this historical response lists game 775296 as Final, Los Angeles Dodgers 7,
+          New York Yankees 6. That confirms the synthetic scoreboard fixture only; the application pages
+          do not hard-code those historical values (the test fixture is separate).
+        </li>
+        <li>
+          The game and scoring-feed pages request current game data from the
+          <a href="https://statsapi.mlb.com/api/v1.1/game/775296/feed/live">official MLB live game feed</a>.
+          Missing values are displayed blank or labeled unavailable rather than inferred.
+        </li>
+        <li>
+          A primary field-error row is selected by the exact result event type <code>field_error</code>,
+          not by matching prose. The official
+          <a href="https://statsapi.mlb.com/api/v1/eventTypes">event registry</a> marks that code as
+          a plate-appearance event (<code>baseRunningEvent:false</code>). On 2026-11-20, the linked
+          <a href="https://statsapi.mlb.com/api/v1/game/775296/playByPlay?fields=allPlays,atBatIndex,result,eventType,description,rbi">official MLB play-by-play</a>
+          was fetched: at-bat index 37 is <code>field_error</code>, while index 38 is
+          <code>fielders_choice</code> even though its description mentions a throwing error. This
+          filter does not claim to list every error mentioned in a play.
+        </li>
+        <li>
+          Pending scorer rows include only <code>os_ruling_pending_primary</code>. They exclude
+          <code>os_ruling_pending_prior</code>. The official
+          <a href="https://statsapi.mlb.com/api/v1/eventTypes">event-type registry</a> was fetched on
+          2026-11-20: the primary code is a plate-appearance event, and the prior code is a
+          base-running event; both descriptions read “Official Scorer Ruling Pending.” Synthetic tests
+          guard against treating the prior marker as a primary ruling.
+        </li>
+        <li>
+          Recent feed rows are stored in the current browser's local storage; old rows not reconfirmed by
+          the latest successful scan are labeled as saved copies and excluded from current counts.
+          GitHub Pages serves static files and does not run a repository server; see
+          <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages">GitHub's Pages documentation</a>.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Not verified or not implemented — does not block the site</h2>
+      <ul>
+        <li>
+          <strong>Recovered original source:</strong> the uploaded README describes research, datasets,
+          a trained model, replay archives, and pages that are absent from this checkout. The README is
+          historical project text, not a verification of those claims. The earlier source audit records
+          that the named upstream was not retrievable at the time; a GitHub API
+          <a href="https://api.github.com/repos/buffedlizard55-lab/ErrorsLive">repository lookup</a>
+          cannot establish whether it was private, renamed, or deleted. No model, historic values, or
+          missing pages have been recreated or inferred.
+        </li>
+        <li>
+          <strong>Completeness of field-error records:</strong> only plays whose result event type is
+          <code>field_error</code> appear in that category. A fielder's-choice result that mentions a
+          throwing error is intentionally not classified as a primary field error. Compare the official
+          <a href="https://statsapi.mlb.com/api/v1/game/775296/playByPlay?fields=allPlays,atBatIndex,result,eventType,description,rbi">play-by-play classifications</a>
+          when reviewing this definition.
+        </li>
+        <li>
+          <strong>Review-type labels and scoreboard review banner:</strong> the reconstructed interface
+          maps some review types to labels using feed codes/descriptions and reads the schedule's
+          <code>flags.inReview</code> value for its optional banner. Those mappings and the flag's presence
+          in current live schedule responses were not checked against a live MLB response in this
+          restoration. Inspect the official
+          <a href="https://statsapi.mlb.com/api/v1/eventTypes">event registry</a> and
+          <a href="https://statsapi.mlb.com/api/v1/schedule?sportId=1&amp;date=2026-11-20&amp;hydrate=flags">hydrated schedule</a>
+          before relying on those labels or the banner.
+        </li>
+        <li>
+          <strong>Scoring-change history:</strong> this browser build does not preserve successive
+          classification snapshots or claim to detect official reclassifications. MLB's separate
+          <a href="https://www.mlb.com/official-information/scoring-changes">official scoring-changes page</a>
+          is provided for reference; no scoring-change values are published here.
+        </li>
+        <li>
+          <strong>Live browser access and current feeds:</strong> tests use synthetic fixtures. Official
+          registry and the historical play-by-play fixture linked above were fetched, but this test run
+          did not exercise browser CORS, today's schedule/game responses, team-logo images, or this
+          commit's public Pages behavior. Those remain unverified here. Manual review links:
+          <a href="https://statsapi.mlb.com/api/v1/schedule?sportId=1&amp;date=2026-11-20">date-specific MLB schedule</a>,
+          <a href="https://statsapi.mlb.com/api/v1/eventTypes">event-type registry</a>, and
+          <a href="https://snapquast73-boop.github.io/ERLIVE/">this project's GitHub Pages site</a>.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Verification performed locally</h2>
+      <p>
+        The automated suite covers the rendered scoreboard, scorer-feed filters, the primary-versus-prior
+        pending distinction, cached-row labeling, missing fields, empty schedules, failed requests,
+        sound preference, notification controls, source links and local href/src targets.
+        JavaScript syntax and local links are checked separately. These checks establish offline behavior
+        only; they do not replace a live MLB request or a successful GitHub Pages deployment. The verified
+        outcomes will be recorded in the repository's
+        <a href="https://github.com/snapquast73-boop/ERLIVE/blob/main/COORDINATION.md">coordination log</a> after final integration.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Unofficial fan project. Not affiliated with MLB or MLB Advanced Media.</p>
+  </footer>
+</body>
+</html>
