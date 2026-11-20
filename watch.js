@@ -39,8 +39,8 @@ async function refresh() {
       const url = `${root}/game/${g.gamePk}/playByPlay`;
       try {
         const pbp = await get(url);
-        return pbp.allPlays.filter(p=>['field_error','official_scorer_pending'].includes(p.result?.eventType)).map(p=>row(p.result.description ?? '',url,!p.result.description));
-      } catch { return [row('Play feed unavailable',schedule,true)]; }
+        return pbp.allPlays.filter(p=>['field_error','os_ruling_pending_primary'].includes(p.result?.eventType)).map(p=>row(p.result.description ?? '',url,!p.result.description));
+      } catch { return [row('Play feed unavailable',url,true)]; }
     }));
     if (seq !== version) return;
     el('feed').replaceChildren(...feeds.flat());
